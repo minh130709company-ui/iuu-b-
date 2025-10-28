@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xin lỗi Hiền</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #fff0f5;
+    overflow-x: hidden;
+  }
+  .page { display: none; text-align: center; padding: 20px; }
+  .active { display: block; }
+
+  /* Trái tim */
+  .heart {
+    position: absolute;
+    width: 20px; height: 20px;
+    background: red;
+    transform: rotate(45deg);
+    animation: fall 5s linear infinite;
+    z-index: 100;
+  }
+  .heart:before, .heart:after {
+    content: ""; position: absolute; width: 20px; height: 20px; background: red; border-radius: 50%;
+  }
+  .heart:before { top: -10px; left: 0; }
+  .heart:after { left: 10px; top: 0; }
+  @keyframes fall { 0% { top: -50px; } 100% { top: 100vh; } }
+
+  button {
+    padding: 10px 20px; margin: 10px;
+    font-size: 18px; border: none; border-radius: 10px; cursor: pointer;
+  }
+
+  #slideshow img {
+    width: 80%; max-width: 400px;
+    margin: 20px auto; display: none; border-radius: 15px;
+  }
+
+  .cute { color: #ff69b4; font-size: 24px; animation: blink 1s infinite; }
+  @keyframes blink { 0%,50%,100% {opacity:1;} 25%,75% {opacity:0.3;} }
+</style>
+</head>
+<body>
+
+<!-- Trang 1 -->
+<div id="page1" class="page active">
+  <h1>Gửi Vũ Thu Hiền của mìnggg, 2 ngày rồi bé đi ngủ mà thiếu lời chúc ngủ ngonnn của tớ, tớ làm web này để xin lỗi bé nek</h1>
+  <div>
+    <img src="images/img1.jpg" width="200">
+    <img src="images/img2.jpg" width="200">
+    <img src="images/img3.jpg" width="200">
+  </div>
+  <div>
+    <audio controls src="audio/voice1.m4a"></audio>
+    <audio controls src="audio/voice2.m4a"></audio>
+  </div>
+  <div>
+    <button onclick="nextPage()">Hết giận</button>
+    <button id="notForgive">Không hết giận</button>
+  </div>
+</div>
+
+<!-- Trang 2 -->
+<div id="page2" class="page">
+  <h2>Nhớ bé nhìu, bé biết tình cảm của tớ thật lòng thế nào mò, khum phải tớ vô tâm âu, iu bé nhất trên đời mòoo</h2>
+  <div id="slideshow">
+    <img src="images/1.jpg">
+    <img src="images/2.jpg">
+    <img src="images/3.jpg">
+    <img src="images/4.jpg">
+    <img src="images/5.jpg">
+    <img src="images/6.jpg">
+    <img src="images/7.jpg">
+    <img src="images/8.jpg">
+    <img src="images/9.jpg">
+  </div>
+  <button onclick="shootHearts()">Bắn timm 💖</button>
+  <button onclick="nextPage()">Sang Trang 3</button>
+</div>
+
+<!-- Trang 3 -->
+<div id="page3" class="page">
+  <h1 class="cute">Bấm vào nghe voice tôi chúc bé ngủ ngoann nka 💕</h1>
+  <button onclick="document.getElementById('sleepAudio').play()">Nghe voice của tôi</button>
+  <audio id="sleepAudio" src="audio/sleep.m4a"></audio>
+</div>
+
+<script>
+  // Trang 1: Trái tim rơi
+  for(let i=0;i<50;i++){
+    let heart = document.createElement('div');
+    heart.className='heart';
+    heart.style.left=Math.random()*100+'vw';
+    heart.style.animationDuration=(3+Math.random()*5)+'s';
+    heart.style.width=heart.style.height=(10+Math.random()*20)+'px';
+    document.body.appendChild(heart);
+  }
+
+  // Nút Không hết giận
+  const btn = document.getElementById('notForgive');
+  let clickCount=0;
+  btn.addEventListener('click',()=>{
+    clickCount++;
+    btn.style.transform='scale('+(1+0.1*clickCount)+')';
+    btn.style.transition='transform 0.3s';
+    // thả trái tim to hơn
+    for(let i=0;i<5;i++){
+      let span=document.createElement('span');
+      span.textContent='💖';
+      span.style.position='absolute';
+      span.style.left=(Math.random()*80+10)+'%';
+      span.style.top=(Math.random()*80+10)+'%';
+      span.style.fontSize=(24+clickCount*2)+'px';
+      document.body.appendChild(span);
+      setTimeout(()=>span.remove(),2000);
+    }
+    if(clickCount>=10) clickCount=10; // giới hạn max 10 lần
+  });
+
+  // Chuyển trang
+  function nextPage(){
+    if(document.getElementById('page1').classList.contains('active')){
+      document.getElementById('page1').classList.remove('active');
+      document.getElementById('page2').classList.add('active');
+      startSlideshow();
+    } else if(document.getElementById('page2').classList.contains('active')){
+      document.getElementById('page2').classList.remove('active');
+      document.getElementById('page3').classList.add('active');
+    }
+  }
+
+  // Slideshow trang 2
+  let slideIndex=0;
+  function startSlideshow(){
+    const slides=document.querySelectorAll('#slideshow img');
+    slides.forEach(s=>s.style.display='none');
+    slideIndex=0;
+    slides[slideIndex].style.display='block';
+    setInterval(()=>{
+      slides[slideIndex].style.display='none';
+      slideIndex++;
+      if(slideIndex>=slides.length) slideIndex=0;
+      slides[slideIndex].style.display='block';
+    },1000);
+  }
+
+  // Nút bắn timm trang 2
+  function shootHearts(){
+    for(let i=0;i<10;i++){
+      let span=document.createElement('span');
+      span.textContent='💖';
+      span.style.position='absolute';
+      span.style.left=(Math.random()*80+10)+'%';
+      span.style.top=(Math.random()*80+10)+'%';
+      span.style.fontSize=(20+Math.random()*20)+'px';
+      document.body.appendChild(span);
+      setTimeout(()=>span.remove(),2000);
+    }
+  }
+</script>
+
+</body>
+</html>
